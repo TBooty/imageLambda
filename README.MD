@@ -15,4 +15,8 @@ This lambda will use the pre-signed link from the request download the file and 
 
 terraform - contains terraform to create the infrastructure required 
 
+Pillow zip contains the python packages required for the lambda to run.
+
+If you want to create your own zip you can run the docker file and copy the data to a folder and create a zip
+
 ![architecture](architecture.png "architecture")
