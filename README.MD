@@ -11,3 +11,4 @@ This lambda will use the pre-signed link from the request download the file and 
 
 terraform - contains terraform to create the infrastructure required 
 
+![architecture](architecture.png "architecture")
