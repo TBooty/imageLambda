@@ -10,17 +10,18 @@ terraform {
 }
 
 provider "aws" {
-  region  = "us-east-2"
+  region  = var.region
+  default_tags {
+   tags = {
+     Environment = "Test"
+     Project     = "ThumbnailGenerator"
+   }
+ }
 }
 
 #Create the main images bucket
 resource "aws_s3_bucket" "s3_bucket" {
-  bucket = "images-bucket-main"
-
-  tags = {
-    Name        = "images-bucket-main"
-    Environment = "Dev"
-  }
+  bucket = var.image_bucket_name
 }
 
 #Attach a private ACL to this bucket
@@ -32,12 +33,12 @@ resource "aws_s3_bucket_acl" "s3_acl" {
 #Create the access point to the S3 bucket
 resource "aws_s3_access_point" "images_access_point" {
   bucket = aws_s3_bucket.s3_bucket.id
-  name   = "images-ap"
+  name   = var.s3_object_access_point_name
 }
 
 #Configure AP to use lambda
 resource "aws_s3control_object_lambda_access_point" "images_thumbnail" {
-  name = "images-ap"
+  name = var.lambda_access_point_name
 
   configuration {
     supporting_access_point = aws_s3_access_point.images_access_point.arn
@@ -100,7 +101,7 @@ resource "aws_lambda_layer_version" "pillow_layer" {
 
 #Lambda infrastructure
 resource "aws_lambda_function" "images_lambda" {
-  function_name = "images_lambda"
+  function_name = var.lambda_name
   filename         = data.archive_file.zip.output_path
   source_code_hash = data.archive_file.zip.output_base64sha256
   role    = aws_iam_role.thumbnail_lambda_role.arn

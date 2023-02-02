@@ -1,0 +1,5 @@
+region                             =   "us-east-2"
+image_bucket_name                  =   "images-bucket-main"
+s3_object_access_point_name        =   "images-ap"
+lambda_access_point_name           =   "images-ap"
+lambda_name                        =   "images_lambda"
